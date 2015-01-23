@@ -29,6 +29,13 @@ Actually it's not really CI since it doesn't run after every push (TODO), but it
 - https://developer.github.com/guides/building-a-ci-server/
 - https://github.com/eclipse/eclipse-webhook
 
+## Todo
+
+- Test and create status for every commit pushed to a repo, not just pull reqs
+- Make image/redirect showing status of a project's master branch
+- Handle concurrent test running
+- Add status page with project build history
+
 ## License
 
 MIT
