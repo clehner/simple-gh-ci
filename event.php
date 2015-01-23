@@ -28,12 +28,17 @@ if ($hash !== hash_hmac($algo, $payload, WEBHOOK_SECRET)) {
 	exit('invalid secret');
 }
 
+$delivery_id = @$_SERVER['HTTP_X_GITHUB_DELIVERY'];
 switch (@$_SERVER['HTTP_X_GITHUB_EVENT']) {
 case 'ping':
 	echo 'pong';
 case 'pull_request':
-	$delivery_id = @$_SERVER['HTTP_X_GITHUB_DELIVERY'];
 	if (handle_pull_request($data, $delivery_id) === false) {
+		http_response_code(500);
+	}
+	break;
+case 'push':
+	if (handle_push($data, $delivery_id) === false) {
 		http_response_code(500);
 	}
 	break;
@@ -103,9 +108,23 @@ function handle_pull_request($event, $delivery_id) {
 	$sha = $pr->head->sha;
 	$ref = $pr->head->ref;
 	$repo = $pr->base->repo;
+	$head_clone_url = $pr->head->repo->clone_url;
+
+	do_status($pr->head->repo);
+}
+
+function handle_push($push, $delivery_id) {
+	$sha = $push->after;
+	$ref = $push->ref_name;
+	do_status($push->repository);
+	if ($ref == $push->repository->default_branch) {
+		// update repo status
+	};
+}
+
+function do_status($base_repo, $head_repo, $ref_name) {
 	$repo_name = $repo->full_name;
 	$clone_url = $repo->clone_url;
-	$head_clone_url = $pr->head->repo->clone_url;
 	$status_url = str_replace('{sha}', $sha, $repo->statuses_url);
 
 	// Find place to put output
