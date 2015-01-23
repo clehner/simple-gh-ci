@@ -100,6 +100,7 @@ function handle_pull_request($event, $delivery_id) {
 	$repo = $pr->base->repo;
 	$repo_name = $repo->full_name;
 	$clone_url = $repo->clone_url;
+	$head_clone_url = $pr->head->repo->clone_url
 	$status_url = str_replace('{sha}', $sha, $repo->statuses_url);
 
 	// Find place to put output
@@ -129,7 +130,7 @@ function handle_pull_request($event, $delivery_id) {
 	// Checkout PR branch
 	passthru(implode(' && ', array(
 		'cd '.escapeshellarg($dir),
-		'git fetch origin '.escapeshellarg($ref),
+		'git fetch '.escapeshellarg($head_clone_url).' '.escapeshellarg($ref),
 		'git reset --hard '.escapeshellarg($sha),
 		'git clean -dxf'
 	)), $ret);
