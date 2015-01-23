@@ -4,8 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 ini_set('html_errors', 'off');
 
-$headers = getallheaders();
-$hub_signature = @$headers['X-Hub-Signature'];
+$hub_signature = @$_SERVER['HTTP_X_HUB_SIGNATURE'];
 if (!$hub_signature) {
 	exit('missing signature');
 }
@@ -24,11 +23,11 @@ if ($hash !== hash_hmac($algo, $payload, WEBHOOK_SECRET)) {
 	exit('invalid secret');
 }
 
-switch ($headers['X-GitHub-Event']) {
+switch (@$_SERVER['HTTP_X_GITHUB_EVENT']) {
 case 'ping':
 	echo 'pong';
 case 'pull_request':
-	$delivery_id = $headers['X-GitHub-Delivery'];
+	$delivery_id = @$_SERVER['HTTP_X_GITHUB_DELIVERY'];
 	if (handle_pull_request($data, $delivery_id) === false) {
 		http_response_code(500);
 	}
