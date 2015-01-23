@@ -1,5 +1,5 @@
 <?php
-require_once('cred.php');
+require_once('config.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 ini_set('html_errors', 'off');
@@ -85,7 +85,7 @@ function exec_to($cmd, $dir, $outfile) {
 function handle_pull_request($event, $delivery_id) {
 	switch($event->action) {
 	case 'opened':
-	case 'synchronized':
+	case 'synchronize':
 		break;
 	case 'closed':
 		// TODO: Remove URL from PR status?
@@ -100,7 +100,7 @@ function handle_pull_request($event, $delivery_id) {
 	$repo = $pr->base->repo;
 	$repo_name = $repo->full_name;
 	$clone_url = $repo->clone_url;
-	$head_clone_url = $pr->head->repo->clone_url
+	$head_clone_url = $pr->head->repo->clone_url;
 	$status_url = str_replace('{sha}', $sha, $repo->statuses_url);
 
 	// Find place to put output
