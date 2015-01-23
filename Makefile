@@ -13,5 +13,3 @@ config.php: | config.example.php
 
 test:
 	date
-	sleep 5
-	date
