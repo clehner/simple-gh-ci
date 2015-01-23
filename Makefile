@@ -1,6 +1,6 @@
 dirs = builds results
 
-all: config.php $(dirs) test
+init: config.php $(dirs)
 
 $(dirs):
 	mkdir $@
@@ -11,5 +11,5 @@ config.php: | config.example.php
 	@sed <$| >$@ \
 		's/xxxx*/$(shell </dev/urandom tr -dc _A-Z-a-z-0-9 | head -c24)/'
 
-test:
+test: config.php
 	php event.php | grep -q 'missing signature'
