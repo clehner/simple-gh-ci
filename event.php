@@ -2,6 +2,13 @@
 require_once('config.php');
 ini_set('html_errors', 'off');
 
+$state_descriptions = array(
+	'pending' => 'Waiting for tests to run...',
+	'error' => 'There was a problem with running the tests.',
+	'success' => 'Tests passed.',
+	'failure' => 'Tests failed.'
+);
+
 $hub_signature = @$_SERVER['HTTP_X_HUB_SIGNATURE'];
 if (!$hub_signature) {
 	exit('missing signature');
@@ -60,11 +67,12 @@ function github($path, $params) {
 
 /* create/update our status for the repo/commit */
 function create_status($status_url, $state, $url=null) {
+	global $state_descriptions;
 	return github($status_url, array(
 		'state' => $state,
 		'target_url' => $url,
 		'context' => APP_NAME,
-		//'description' => $msg
+		'description' => @$state_descriptions[$state]
 	));
 }
 
