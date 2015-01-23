@@ -1,7 +1,5 @@
 <?php
 require_once('config.php');
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
 ini_set('html_errors', 'off');
 
 $hub_signature = @$_SERVER['HTTP_X_HUB_SIGNATURE'];
