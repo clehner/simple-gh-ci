@@ -2,6 +2,8 @@
 
 Simple GitHub continuous integration server.
 
+Actually it's not really CI since it doesn't run after every push (TODO), but it tests pull requests, which is nice.
+
 ## Usage
 
 - Create a [GitHub access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
