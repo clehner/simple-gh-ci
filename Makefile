@@ -12,4 +12,4 @@ config.php: | config.example.php
 		's/xxxx*/$(shell </dev/urandom tr -dc _A-Z-a-z-0-9 | head -c24)/'
 
 test:
-	date
+	php event.php | grep -q 'missing signature'
